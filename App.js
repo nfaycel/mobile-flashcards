@@ -32,7 +32,8 @@ export default class App extends React.Component {
             name="Deck"
             component={Deck}
             options={({ route }) => {
-              return { title: "Deck " + route.params.DeckId.key };
+              return { title: route.params.DeckId.key };
+              // return { title: "Deck " + route.params.DeckId.key };
             }}
           />
         </Stack.Navigator>
