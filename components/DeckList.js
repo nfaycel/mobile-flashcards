@@ -21,7 +21,7 @@ export default class DeckList extends Component {
 
 const Nav = () => {
   return (
-    <Tab.Navigator
+    <Tab.Navigator initialRouteName={"DeckList"}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -36,10 +36,10 @@ const Nav = () => {
       tabBarOptions={{
         activeTintColor: "#AA36F4",
         inactiveTintColor: "gray",
-        style:{
-          backgroundColor: "yellow",
-          zIndex: 34
-        }
+        // style:{
+        //   backgroundColor: "yellow",
+        //   zIndex: 34
+        // }
       }}
     >
       <Tab.Screen name="Decks" component={List} />
