@@ -4,6 +4,7 @@ import DeckList from "./components/DeckList";
 import Deck from "./components/Deck";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import AddCard from "./components/AddCard";
 
 const Stack = createStackNavigator();
 
@@ -26,14 +27,20 @@ export default class App extends React.Component {
             name="DeckList"
             component={DeckList}
             // options = {{ headerShown: false }}
-            options={({ route }) => ({ title: getHeaderTitle(route) })}
+            options={({ route }) => ({ title: getHeaderTitle(route),headerTitleAlign:"center" })}
           />
           <Stack.Screen
             name="Deck"
             component={Deck}
             options={({ route }) => {
-              return { title: route.params.DeckId.key };
-              // return { title: "Deck " + route.params.DeckId.key };
+              return { title: route.params.DeckId.key,headerTitleAlign:"center",headerTruncatedBackTitle:true, headerBackTitle: route.params.DeckId.key, };
+            }}
+          />
+           <Stack.Screen
+            name="AddCard"
+            component={AddCard}
+            options={({ route }) => {
+              return { title: route.params.DeckId.key,headerTitleAlign:"center",headerBackTitleVisible:true,headerTruncatedBackTitle:true, headerBackTitle: route.params.DeckId.key, };
             }}
           />
         </Stack.Navigator>

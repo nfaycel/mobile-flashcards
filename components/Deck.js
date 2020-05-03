@@ -16,7 +16,10 @@ export default class Deck extends Component {
         <View style={styles.btnGroup}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => console.log("clicked")}
+            onPress={() => this.props.navigation.navigate(
+                'AddCard',
+                 {DeckId: DeckId}
+              )}
           >
             <Text style={[styles.text, { color: "black" }]}>Add Card</Text>
           </TouchableOpacity>
