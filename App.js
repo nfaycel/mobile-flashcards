@@ -5,6 +5,7 @@ import Deck from "./components/Deck";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AddCard from "./components/AddCard";
+import Quiz from "./components/Quiz";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,14 @@ export default class App extends React.Component {
               return { title: route.params.DeckId.key,headerTitleAlign:"center",headerBackTitleVisible:true,headerTruncatedBackTitle:true, headerBackTitle: route.params.DeckId.key, };
             }}
           />
+           <Stack.Screen
+            name="Quiz"
+            component={Quiz}
+            options={({ route }) => {
+              return { title: route.params.DeckId.key,headerTitleAlign:"center",headerBackTitleVisible:true,headerTruncatedBackTitle:true, headerBackTitle: route.params.DeckId.key, };
+            }}
+          />
+
         </Stack.Navigator>
       </NavigationContainer>
     );

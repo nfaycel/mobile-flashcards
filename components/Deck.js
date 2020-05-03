@@ -26,7 +26,10 @@ export default class Deck extends Component {
 
           <TouchableOpacity
             style={[styles.button, {backgroundColor: "#AA36F4"}]}
-            onPress={() => console.log("start quiz")}
+            onPress={() => this.props.navigation.navigate(
+                'Quiz',
+                 {DeckId: DeckId}
+              )}
           >
             <Text style={[styles.text, { color: "white",  }]}>Start Quiz</Text>
           </TouchableOpacity>
