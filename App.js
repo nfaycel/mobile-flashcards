@@ -6,6 +6,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AddCard from "./components/AddCard";
 import Quiz from "./components/Quiz";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./reducers";
 
 const Stack = createStackNavigator();
 
@@ -22,38 +25,59 @@ export default class App extends React.Component {
   // };
   render() {
     return (
-      <NavigationContainer style={styles.container}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="DeckList"
-            component={DeckList}
-            // options = {{ headerShown: false }}
-            options={({ route }) => ({ title: getHeaderTitle(route),headerTitleAlign:"center" })}
-          />
-          <Stack.Screen
-            name="Deck"
-            component={Deck}
-            options={({ route }) => {
-              return { title: route.params.DeckId.key,headerTitleAlign:"center",headerTruncatedBackTitle:true, headerBackTitle: route.params.DeckId.key, };
-            }}
-          />
-           <Stack.Screen
-            name="AddCard"
-            component={AddCard}
-            options={({ route }) => {
-              return { title: route.params.DeckId.key,headerTitleAlign:"center",headerBackTitleVisible:true,headerTruncatedBackTitle:true, headerBackTitle: route.params.DeckId.key, };
-            }}
-          />
-           <Stack.Screen
-            name="Quiz"
-            component={Quiz}
-            options={({ route }) => {
-              return { title: route.params.DeckId.key,headerTitleAlign:"center",headerBackTitleVisible:true,headerTruncatedBackTitle:true, headerBackTitle: route.params.DeckId.key, };
-            }}
-          />
-
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Provider store={createStore(reducer)}>
+        <NavigationContainer style={styles.container}>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="DeckList"
+              component={DeckList}
+              // options = {{ headerShown: false }}
+              options={({ route }) => ({
+                title: getHeaderTitle(route),
+                headerTitleAlign: "center",
+              })}
+            />
+            <Stack.Screen
+              name="Deck"
+              component={Deck}
+              options={({ route }) => {
+                return {
+                  title: route.params.DeckId,
+                  headerTitleAlign: "center",
+                  headerTruncatedBackTitle: true,
+                  headerBackTitle: route.params.DeckId,
+                };
+              }}
+            />
+            <Stack.Screen
+              name="AddCard"
+              component={AddCard}
+              options={({ route }) => {
+                return {
+                  title: "Add Card to "+route.params.DeckId,
+                  headerTitleAlign: "center",
+                  headerBackTitleVisible: true,
+                  headerTruncatedBackTitle: true,
+                  headerBackTitle: route.params.DeckId,
+                };
+              }}
+            />
+            <Stack.Screen
+              name="Quiz"
+              component={Quiz}
+              options={({ route }) => {
+                return {
+                  title: route.params.DeckId,
+                  headerTitleAlign: "center",
+                  headerBackTitleVisible: true,
+                  headerTruncatedBackTitle: true,
+                  headerBackTitle: route.params.DeckId,
+                };
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     );
   }
 }

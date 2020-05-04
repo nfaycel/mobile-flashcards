@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useRef } from "react";
 import {
   Text,
   TextInput,
@@ -10,9 +10,17 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { NavigationActions, StackActions } from "@react-navigation/native";
 
-export default function AddDeck() {
+import { connect } from "react-redux";
+import { addDeck } from "../actions";
+
+function AddDeck(props) {
   const [value, onChangeText] = React.useState("");
+  const dispatch = props.dispatch;
+  const navigation = props.navigation;
+  const inputText = useRef(null);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -25,10 +33,16 @@ export default function AddDeck() {
             style={styles.inputText}
             onChangeText={(text) => onChangeText(text)}
             value={value}
+            ref={inputText}
           />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => console.log(value)}
+            onPress={() => {
+              navigation.dispatch(StackActions.replace("DeckList"));
+              dispatch(addDeck({ [value]: { title: value } }));
+              onChangeText("");
+              navigation.navigate("Deck", { DeckId: value });
+            }}
           >
             <Text style={{ color: "white", fontSize: 16 }}>Create Deck</Text>
           </TouchableOpacity>
@@ -47,7 +61,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // marginTop: Constants.statusBarHeight,
     alignItems: "stretch",
     justifyContent: "flex-start",
     marginTop: 20,
@@ -75,3 +88,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#AA36F4",
   },
 });
+
+export default connect()(AddDeck);

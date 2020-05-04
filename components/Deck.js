@@ -1,50 +1,51 @@
-import React, { Component } from "react";
+import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default class Deck extends Component {
-  render() {
-    const DeckId = this.props.route.params.DeckId.key
-    return (
-      <View style={styles.container}>
-        <View>
-          <Text style={styles.text}>{DeckId}</Text>
-          <Text style={[styles.text, { fontSize: 18, color: "gray" }]}>
-            2 cards
-          </Text>
-        </View>
-        <View style={styles.btnGroup}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => this.props.navigation.navigate(
-                'AddCard',
-                 {DeckId: DeckId}
-              )}
-          >
-            <Text style={[styles.text, { color: "black" }]}>Add Card</Text>
-          </TouchableOpacity>
+export default function Deck(props) {
+  const DeckId = props.route.params.DeckId;
 
-          <TouchableOpacity
-            style={[styles.button, {backgroundColor: "#AA36F4"}]}
-            onPress={() => this.props.navigation.navigate(
-                'Quiz',
-                 {DeckId: DeckId}
-              )}
-          >
-            <Text style={[styles.text, { color: "white",  }]}>Start Quiz</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[{backgroundColor: null}]}
-            onPress={() => console.log("delete",DeckId)}
-          >
-            <Text style={[styles.text, { color: "#FF1744", fontSize:17, marginTop:10 }]}>Delete Deck {DeckId}</Text>
-          </TouchableOpacity>
-          
-        </View>
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.text}>{DeckId}</Text>
+        <Text style={[styles.text, { fontSize: 18, color: "gray" }]}>
+          2 cards
+        </Text>
       </View>
-    );
-  }
+      <View style={styles.btnGroup}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>{
+            props.navigation.navigate("AddCard", { DeckId: DeckId })}
+          }
+        >
+          <Text style={[styles.text, { color: "black" }]}>Add Card</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#AA36F4" }]}
+          onPress={() => props.navigation.navigate("Quiz", { DeckId: DeckId })}
+        >
+          <Text style={[styles.text, { color: "white" }]}>Start Quiz</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[{ backgroundColor: null }]}
+          onPress={() => console.log("delete", DeckId)}
+        >
+          <Text
+            style={[
+              styles.text,
+              { color: "#FF1744", fontSize: 17, marginTop: 10 },
+            ]}
+          >
+            Delete Deck {DeckId}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -68,8 +69,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
   },
-  btnGroup:{
-      margin: 15,
-      justifyContent: "space-evenly"
-  }
+  btnGroup: {
+    margin: 15,
+    justifyContent: "space-evenly",
+  },
 });
