@@ -7,29 +7,40 @@ import {
   Text,
 } from "react-native";
 import { connect } from "react-redux";
+import { handleGetAllDecks  } from "../actions";
 
-const List = (props) => {
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={props.decksList}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.deck}
-            onPress={() => props.navigation.navigate("Deck", { DeckId: item.title })}
-          >
-            <View>
-              <Text style={styles.text}>{item.title}</Text>
-              <Text style={{ textAlign: "center" }}>{item.questions&&item.questions.length()}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-    </View>
-  );
-};
+class List extends React.Component {
+  componentDidMount() {
+    console.log("List did")
+    this.props.initilizeData();
+  }
 
+  render() {
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={this.props.decksList}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.deck}
+              onPress={() =>
+                this.props.navigation.navigate("Deck", { DeckId: item.title })
+              }
+            >
+              <View>
+                <Text style={styles.text}>{item.title}</Text>
+                <Text style={{ textAlign: "center" }}>
+                  {item.questions?item.questions.length:0} cards
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+    );
+  }
+}
 const styles = StyleSheet.create({
   text: {
     marginLeft: 10,
@@ -60,17 +71,22 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ decks }) => {
-
   const decksList = [];
-  Object.entries(decks).forEach(([key, value]) => {
+  decks && Object.entries(decks).forEach(([key, value]) => {
     decksList.push(value);
   });
 
-
-
   return {
-    decksList
+    decksList,
   };
 };
 
-export default connect(mapStateToProps)(List);
+function mapDispatchToProps(dispatch) {
+  return {
+    initilizeData: () => {
+      dispatch(handleGetAllDecks());
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);

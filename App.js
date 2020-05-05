@@ -9,26 +9,20 @@ import {
 } from "@react-navigation/stack";
 import AddCard from "./components/AddCard";
 import Quiz from "./components/Quiz";
-import { createStore } from "redux";
+import { createStore,applyMiddleware } from "redux";
+import thunk from 'redux-thunk';
 import { Provider } from "react-redux";
 import reducer from "./reducers";
 
 const Stack = createStackNavigator();
 
-export default class App extends React.Component {
-  // static navigationOptions = {
-  //   title: "DeckList",
-  //   headerStyle: {
-  //     backgroundColor: "#f4511e",
-  //   },
-  //   headerTintColor: "#fff",
-  //   headerTitleStyle: {
-  //     fontWeight: "bold",
-  //   },
-  // };
+class App extends React.Component {
+componentDidMount(){
+  console.log("app mounted")
+}
   render() {
     return (
-      <Provider store={createStore(reducer)}>
+      <Provider store={createStore(reducer,applyMiddleware(thunk))}>
         <NavigationContainer style={styles.container}>
           <Stack.Navigator>
             <Stack.Screen
@@ -111,3 +105,5 @@ function getHeaderTitle(route) {
 
   return routeName;
 }
+
+export default App;
