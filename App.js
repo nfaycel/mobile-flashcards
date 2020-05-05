@@ -3,7 +3,10 @@ import { StyleSheet, Text, View } from "react-native";
 import DeckList from "./components/DeckList";
 import Deck from "./components/Deck";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  HeaderBackButton,
+} from "@react-navigation/stack";
 import AddCard from "./components/AddCard";
 import Quiz from "./components/Quiz";
 import { createStore } from "redux";
@@ -40,12 +43,19 @@ export default class App extends React.Component {
             <Stack.Screen
               name="Deck"
               component={Deck}
-              options={({ route }) => {
+              options={({ route,navigation }) => {
                 return {
                   title: route.params.DeckId,
                   headerTitleAlign: "center",
                   headerTruncatedBackTitle: true,
                   headerBackTitle: route.params.DeckId,
+                  headerLeft: () => (
+                    <HeaderBackButton
+                      onPress={() => navigation.navigate("Decks")}
+                      title="Info"
+                      color="#fff"
+                    />
+                  ),
                 };
               }}
             />
@@ -54,9 +64,9 @@ export default class App extends React.Component {
               component={AddCard}
               options={({ route }) => {
                 return {
-                  title: "Add Card to "+route.params.DeckId,
+                  title: "Add Card to " + route.params.DeckId,
                   headerTitleAlign: "center",
-                  headerBackTitleVisible: true,
+                  // headerBackTitleVisible: true,
                   headerTruncatedBackTitle: true,
                   headerBackTitle: route.params.DeckId,
                 };
@@ -67,9 +77,9 @@ export default class App extends React.Component {
               component={Quiz}
               options={({ route }) => {
                 return {
-                  title: route.params.DeckId,
+                  title: "Take Quiz : "+route.params.DeckId,
                   headerTitleAlign: "center",
-                  headerBackTitleVisible: true,
+                  // headerBackTitleVisible: true,
                   headerTruncatedBackTitle: true,
                   headerBackTitle: route.params.DeckId,
                 };

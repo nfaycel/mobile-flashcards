@@ -13,7 +13,7 @@ function DeckList() {
 const Nav = () => {
   return (
     <Tab.Navigator
-      initialRouteName={"DeckList"}
+      initialRouteName={"Decks"}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -31,7 +31,7 @@ const Nav = () => {
       }}
     >
       <Tab.Screen name="Decks" component={List} />
-      <Tab.Screen name="AddDeck" component={AddDeck} />
+      <Tab.Screen name="AddDeck" component={AddDeck}/>
     </Tab.Navigator>
   );
 };

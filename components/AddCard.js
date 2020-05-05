@@ -1,5 +1,4 @@
 import React,{useRef} from "react";
-
 import {
   Text,
   TextInput,
@@ -12,7 +11,7 @@ import {
   Keyboard,
 } from "react-native";
 
-export default function AddCard({ route }) {
+export default function AddCard(props) {
   const [question, onChangeTextQuestion] = React.useState("");
   const [answer, onChangeTextAnswer] = React.useState("");
 

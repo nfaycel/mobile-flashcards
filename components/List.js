@@ -69,7 +69,7 @@ const mapStateToProps = ({ decks }) => {
 
 
   return {
-    decksList,
+    decksList
   };
 };
 

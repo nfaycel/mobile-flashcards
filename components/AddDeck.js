@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { Component } from "react";
 import {
   Text,
   TextInput,
@@ -10,46 +10,52 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { NavigationActions, StackActions } from "@react-navigation/native";
 
 import { connect } from "react-redux";
-import { addDeck } from "../actions";
+import { addDeck as createDeck } from "../actions";
+import { StackActions, NavigationActions } from "@react-navigation/native";
 
-function AddDeck(props) {
-  const [value, onChangeText] = React.useState("");
-  const dispatch = props.dispatch;
-  const navigation = props.navigation;
-  const inputText = useRef(null);
+class AddDeck extends Component {
+  state = {
+    value: "",
+  };
 
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <Text style={styles.text}>What is the title of your new Deck ?</Text>
-          <TextInput
-            style={styles.inputText}
-            onChangeText={(text) => onChangeText(text)}
-            value={value}
-            ref={inputText}
-          />
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigation.dispatch(StackActions.replace("DeckList"));
-              dispatch(addDeck({ [value]: { title: value } }));
-              onChangeText("");
-              navigation.navigate("Deck", { DeckId: value });
-            }}
-          >
-            <Text style={{ color: "white", fontSize: 16 }}>Create Deck</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
-  );
+  onChangeText = (textValue) => this.setState({ value: textValue });
+
+  onCreateDeck = () => {
+
+    this.props.handleAddDeck({
+      [this.state.value]: { title: this.state.value },
+    });
+
+    this.onChangeText("");
+    this.props.navigation.navigate("Deck", { DeckId: this.state.value, newDeck:true });
+  };
+
+  render() {
+    return (
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>
+            <Text style={styles.text}>
+              What is the title of your new Deck ?
+            </Text>
+            <TextInput
+              style={styles.inputText}
+              onChangeText={this.onChangeText}
+              value={this.state.value}
+            />
+            <TouchableOpacity style={styles.button} onPress={this.onCreateDeck}>
+              <Text style={{ color: "white", fontSize: 16 }}>Create Deck</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -89,4 +95,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(AddDeck);
+const mapDispatchToProps = (dispatch) => ({
+  handleAddDeck: (value) => dispatch(createDeck(value)),
+});
+
+// const mapStateToProps = (state) => ({
+//   state,
+// });
+
+export default connect(null, mapDispatchToProps)(AddDeck);
