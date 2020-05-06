@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {
   Text,
+  Alert,
   TextInput,
   View,
   StyleSheet,
@@ -10,26 +11,33 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-
 import { connect } from "react-redux";
-import { addDeck as createDeck } from "../actions";
-import { StackActions, NavigationActions } from "@react-navigation/native";
+import { handleAddDeck } from "../actions";
 
 class AddDeck extends Component {
   state = {
     value: "",
   };
-
   onChangeText = (textValue) => this.setState({ value: textValue });
 
   onCreateDeck = () => {
+    console.log("ooo", this.props.decks[this.state.value] ? "yes" : "No");
+    this.props.decks[this.state.value]
+      ? Alert.alert(
+          "Deck title already exists",
+          "Please choose another title !",
+          [{ text: "OK", onPress: () => this.setState({ value: "" }) }],
+          { cancelable: false }
+        )
+      : this.props.dispatch(handleAddDeck(this.state.value)).then(() => {
+          this.props.navigation.navigate("Deck", {
+            DeckId: this.state.value,
+          });
 
-    this.props.handleAddDeck({
-      [this.state.value]: { title: this.state.value },
-    });
-
-    this.onChangeText("");
-    this.props.navigation.navigate("Deck", { DeckId: this.state.value, newDeck:true });
+          this.setState({ value: "" });
+          // this.onChangeText("");
+        });
+    // this.props.navigation.navigate("Deck", { DeckId: this.state.value, newDeck:true });
   };
 
   render() {
@@ -44,11 +52,20 @@ class AddDeck extends Component {
               What is the title of your new Deck ?
             </Text>
             <TextInput
+              placeholder={
+                this.state.value === ""
+                  ? "Type the title of the Deck Please."
+                  : ""
+              }
               style={styles.inputText}
               onChangeText={this.onChangeText}
               value={this.state.value}
             />
-            <TouchableOpacity style={styles.button} onPress={this.onCreateDeck}>
+            <TouchableOpacity
+              disabled={this.state.value === ""}
+              style={this.state.value ? styles.button : styles.buttonDisabled}
+              onPress={this.onCreateDeck}
+            >
               <Text style={{ color: "white", fontSize: 16 }}>Create Deck</Text>
             </TouchableOpacity>
           </View>
@@ -57,6 +74,16 @@ class AddDeck extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+const mapStateToProps = ({ decks }) => ({
+  decks,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddDeck);
 
 const styles = StyleSheet.create({
   text: {
@@ -93,14 +120,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: "#AA36F4",
   },
+  buttonDisabled: {
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 15,
+    borderColor: "#AA36F4",
+    borderRadius: 20,
+    height: 40,
+    width: "80%",
+    alignSelf: "center",
+    backgroundColor: "#828282",
+  },
 });
-
-const mapDispatchToProps = (dispatch) => ({
-  handleAddDeck: (value) => dispatch(createDeck(value)),
-});
-
-// const mapStateToProps = (state) => ({
-//   state,
-// });
-
-export default connect(null, mapDispatchToProps)(AddDeck);

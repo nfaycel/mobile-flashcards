@@ -11,7 +11,6 @@ import { handleGetAllDecks  } from "../actions";
 
 class List extends React.Component {
   componentDidMount() {
-    console.log("List did")
     this.props.initilizeData();
   }
 
@@ -41,6 +40,28 @@ class List extends React.Component {
     );
   }
 }
+
+
+const mapStateToProps = ({ decks }) => {
+  const decksList = [];
+  decks && Object.entries(decks).forEach(([key, value]) => {
+    decksList.push(value);
+  });
+  return {
+    decksList,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    initilizeData: () => {
+      dispatch(handleGetAllDecks());
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);
+
 const styles = StyleSheet.create({
   text: {
     marginLeft: 10,
@@ -69,24 +90,3 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
 });
-
-const mapStateToProps = ({ decks }) => {
-  const decksList = [];
-  decks && Object.entries(decks).forEach(([key, value]) => {
-    decksList.push(value);
-  });
-
-  return {
-    decksList,
-  };
-};
-
-function mapDispatchToProps(dispatch) {
-  return {
-    initilizeData: () => {
-      dispatch(handleGetAllDecks());
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(List);

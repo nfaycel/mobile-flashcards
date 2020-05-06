@@ -1,89 +1,54 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import DeckList from "./components/DeckList";
-import Deck from "./components/Deck";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  HeaderBackButton,
-} from "@react-navigation/stack";
-import AddCard from "./components/AddCard";
-import Quiz from "./components/Quiz";
-import { createStore,applyMiddleware } from "redux";
-import thunk from 'redux-thunk';
+import { createStore } from "redux";
+import middleware from "./middleware";
 import { Provider } from "react-redux";
 import reducer from "./reducers";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "react-native-vector-icons";
+import { StackDecksComponent } from "./components/navigation/StackDecks";
+import { StackNewDeckComponent } from "./components/navigation/StackNewDeck";
 
-const Stack = createStackNavigator();
-
-class App extends React.Component {
-componentDidMount(){
-  console.log("app mounted")
-}
-  render() {
-    return (
-      <Provider store={createStore(reducer,applyMiddleware(thunk))}>
-        <NavigationContainer style={styles.container}>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="DeckList"
-              component={DeckList}
-              // options = {{ headerShown: false }}
-              options={({ route }) => ({
-                title: getHeaderTitle(route),
-                headerTitleAlign: "center",
-              })}
-            />
-            <Stack.Screen
-              name="Deck"
-              component={Deck}
-              options={({ route,navigation }) => {
-                return {
-                  title: route.params.DeckId,
-                  headerTitleAlign: "center",
-                  headerTruncatedBackTitle: true,
-                  headerBackTitle: route.params.DeckId,
-                  headerLeft: () => (
-                    <HeaderBackButton
-                      onPress={() => navigation.navigate("Decks")}
-                      title="Info"
-                      color="#fff"
-                    />
-                  ),
-                };
-              }}
-            />
-            <Stack.Screen
-              name="AddCard"
-              component={AddCard}
-              options={({ route }) => {
-                return {
-                  title: "Add Card to " + route.params.DeckId,
-                  headerTitleAlign: "center",
-                  // headerBackTitleVisible: true,
-                  headerTruncatedBackTitle: true,
-                  headerBackTitle: route.params.DeckId,
-                };
-              }}
-            />
-            <Stack.Screen
-              name="Quiz"
-              component={Quiz}
-              options={({ route }) => {
-                return {
-                  title: "Take Quiz : "+route.params.DeckId,
-                  headerTitleAlign: "center",
-                  // headerBackTitleVisible: true,
-                  headerTruncatedBackTitle: true,
-                  headerBackTitle: route.params.DeckId,
-                };
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
-    );
-  }
+const Tab = createBottomTabNavigator();
+function App() {
+  return (
+    <Provider store={createStore(reducer, middleware)}>
+      <NavigationContainer style={styles.container}>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+              if (route.name === "StackDecksComponent") {
+                iconName = focused ? "ios-list-box" : "ios-list";
+              } else if (route.name === "StackNewDeckComponent") {
+                iconName = focused
+                  ? "ios-add-circle"
+                  : "ios-add-circle-outline";
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: "#AA36F4",
+            inactiveTintColor: "gray",
+            tabBarVisible: false,
+          }}
+        >
+          <Tab.Screen
+            name="StackDecksComponent"
+            component={StackDecksComponent}
+            options={{ title: "Decks List" }}
+          />
+          <Tab.Screen
+            name="StackNewDeckComponent"
+            component={StackNewDeckComponent}
+            options={{ title: "Add Deck" }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -93,17 +58,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-function getHeaderTitle(route) {
-  // Access the tab navigator's state using `route.state`
-  const routeName = route.state
-    ? // Get the currently active route name in the tab navigator
-      route.state.routes[route.state.index].name
-    : // If state doesn't exist, we need to default to `screen` param if available, or the initial screen
-      // In our case, it's "Feed" as that's the first screen inside the navigator
-      route.params?.screen || "Decks List";
-
-  return routeName;
-}
 
 export default App;

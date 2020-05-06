@@ -1,9 +1,21 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function Deck(props) {
   const DeckId = props.route.params.DeckId;
+
+  useEffect(() => {
+    const parent = props.navigation.dangerouslyGetParent();
+    parent.setOptions({
+      tabBarVisible: false
+    });
+    return () =>
+      parent.setOptions({
+        tabBarVisible: true
+      });
+  }, []);
+  
 
   return (
     <View style={styles.container}>

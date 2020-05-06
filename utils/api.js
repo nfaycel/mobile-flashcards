@@ -1,10 +1,13 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from "@react-native-community/async-storage";
 
 const FLASHCARDS_STORAGE_KEY = "flashcards_data";
 
 function initialData() {
+  // clearAsyncStorage = async () => {
+  //   AsyncStorage.clear();
+  // };
   return {
-    'React': {
+    React: {
       title: "React",
       questions: [
         {
@@ -17,7 +20,7 @@ function initialData() {
         },
       ],
     },
-    'JavaScript': {
+    JavaScript: {
       title: "JavaScript",
       questions: [
         {
@@ -32,12 +35,15 @@ function initialData() {
 
 export async function getDecks() {
   try {
+    const clear = await AsyncStorage.clear();
+    console.log(clear)
     const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
     if (results) {
       const data = JSON.parse(results);
+      console.log("result:",(results))
       return data;
     } else {
-        console.log("else:",initialDate())
+      console.log("else:", initialDate());
       await AsyncStorage.setItem(
         FLASHCARDS_STORAGE_KEY,
         JSON.stringify(initialData())
@@ -49,15 +55,15 @@ export async function getDecks() {
       FLASHCARDS_STORAGE_KEY,
       JSON.stringify(initialData())
     );
-    
+
     return initialData();
   }
 }
 
 export async function saveDeckTitle(title) {
   const deck = {
-    title: {
-      title: title,
+    [title]: {
+      "title": title,
       questions: [],
     },
   };
@@ -65,7 +71,7 @@ export async function saveDeckTitle(title) {
   await AsyncStorage.mergeItem(
     FLASHCARDS_STORAGE_KEY,
     JSON.stringify({
-      [title]: deck,
+      deck,
     })
   );
   return deck;

@@ -29,6 +29,16 @@ export function addDeck (deck){
     }
 }
 
+export function handleAddDeck(title){
+    return (dispatch) => {
+        return saveDeckTitle(title)
+        .then((deck) => {
+            dispatch(addDeck(deck));
+            return deck;
+        })
+    }
+}
+
 export function addCard (deckId,card){
     return{
         type: ADD_CARD,

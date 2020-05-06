@@ -3,19 +3,17 @@ import { ADD_DECK, ADD_CARD, GET_ALL_DECKS } from "../actions/index";
 export default function decks(state = {}, action) {
   switch (action.type) {
     case GET_ALL_DECKS:
-      console.log("decks",JSON.stringify(action.decks))
-      return {
-        ...state,decks:{
-          ...action.decks
-        }
-      };
-    case ADD_DECK:
+      console.log("decks", JSON.stringify(action.decks));
       return {
         ...state,
-        decks: {
-          ...state.decks,
-          ...action.deck,
-        },
+        decks:{...action.decks},
+      };
+    case ADD_DECK:
+      console.log("the action:", JSON.stringify(action.deck));
+      const deck = {...action.deck}
+      return {
+        ...state,
+        ["decks"]: {...state.decks, ...action.deck},
       };
     case ADD_CARD:
       return {
