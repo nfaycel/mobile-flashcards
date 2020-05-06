@@ -21,8 +21,7 @@ class AddDeck extends Component {
   onChangeText = (textValue) => this.setState({ value: textValue });
 
   onCreateDeck = () => {
-    console.log("ooo", this.props.decks[this.state.value] ? "yes" : "No");
-    this.props.decks[this.state.value]
+    this.props.decks!== undefined && this.props.decks[this.state.value]
       ? Alert.alert(
           "Deck title already exists",
           "Please choose another title !",

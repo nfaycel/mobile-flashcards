@@ -71,9 +71,11 @@ export async function saveDeckTitle(title) {
   await AsyncStorage.mergeItem(
     FLASHCARDS_STORAGE_KEY,
     JSON.stringify({
-      deck,
+      ...deck,
     })
   );
+  const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
+  console.log("result after addin:",results)
   return deck;
 }
 
@@ -97,6 +99,7 @@ export async function removeDeck(deckId) {
   const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
   if (results) {
     const data = JSON.parse(results);
+    console.log("data to delete:",data)
     delete data[deckId];
 
     await AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(data));

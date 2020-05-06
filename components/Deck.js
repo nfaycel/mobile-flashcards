@@ -1,21 +1,44 @@
-import React,{useEffect} from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { handleDeleteDeck } from "../actions/index";
+import { connect } from "react-redux";
 
-export default function Deck(props) {
+function Deck(props) {
   const DeckId = props.route.params.DeckId;
 
   useEffect(() => {
     const parent = props.navigation.dangerouslyGetParent();
     parent.setOptions({
-      tabBarVisible: false
+      tabBarVisible: false,
     });
     return () =>
       parent.setOptions({
-        tabBarVisible: true
+        tabBarVisible: true,
       });
   }, []);
-  
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Confirm deleting ",
+      "Do you want to delete this Deck?",
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            props
+              .dispatch(handleDeleteDeck(props.route.params.DeckId))
+              .then(() => props.navigation.goBack());
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -28,9 +51,9 @@ export default function Deck(props) {
       <View style={styles.btnGroup}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() =>{
-            props.navigation.navigate("AddCard", { DeckId: DeckId })}
-          }
+          onPress={() => {
+            props.navigation.navigate("AddCard", { DeckId: DeckId });
+          }}
         >
           <Text style={[styles.text, { color: "black" }]}>Add Card</Text>
         </TouchableOpacity>
@@ -44,7 +67,7 @@ export default function Deck(props) {
 
         <TouchableOpacity
           style={[{ backgroundColor: null }]}
-          onPress={() => console.log("delete", DeckId)}
+          onPress={handleDelete}
         >
           <Text
             style={[
@@ -86,3 +109,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+export default connect(null, mapDispatchToProps)(Deck);

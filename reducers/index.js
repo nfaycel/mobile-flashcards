@@ -1,4 +1,4 @@
-import { ADD_DECK, ADD_CARD, GET_ALL_DECKS } from "../actions/index";
+import { ADD_DECK, ADD_CARD, GET_ALL_DECKS, DELETE_DECK } from "../actions/index";
 
 export default function decks(state = {}, action) {
   switch (action.type) {
@@ -6,14 +6,20 @@ export default function decks(state = {}, action) {
       console.log("decks", JSON.stringify(action.decks));
       return {
         ...state,
-        decks:{...action.decks},
+        decks: { ...action.decks },
       };
     case ADD_DECK:
       console.log("the action:", JSON.stringify(action.deck));
-      const deck = {...action.deck}
+      const deck = { ...action.deck };
       return {
         ...state,
-        ["decks"]: {...state.decks, ...action.deck},
+        ["decks"]: { ...state.decks, ...action.deck },
+      };
+    case DELETE_DECK:
+      const newState = state
+      delete newState.decks[action.deckId]
+      return {
+        ...newState,
       };
     case ADD_CARD:
       return {
