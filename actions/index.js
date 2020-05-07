@@ -24,6 +24,7 @@ export function handleGetAllDecks(){
     }
 }
 
+// Add Deck (title)
 export function addDeck (deck){
     return {
         type: ADD_DECK,
@@ -41,14 +42,23 @@ export function handleAddDeck(title){
     }
 }
 
+// Add card (question,answer) to Deck
 export function addCard (deckId,card){
+    console.log("addCard deckId ",deckId," card:",card)
     return{
         type: ADD_CARD,
         deckId,
-        card, // card : {question: "xxx", answer: "zzzzz"}
+        card,
     }
 }
-
+export function saveCard(deckId, card) {
+    console.log("action deckId:",deckId," card:",card)
+    return (dispatch) => {
+        return saveCardToDeck(deckId, card).then(() => {
+            dispatch(addCard(deckId, card));
+        });
+    }
+}
 
 // Delete a deck 
 export function deleteDeck (deckId) {

@@ -1,4 +1,4 @@
-import React,{useRef} from "react";
+import React, { useRef } from "react";
 import {
   Text,
   TextInput,
@@ -10,13 +10,28 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { connect } from "react-redux";
+import { saveCard } from "../actions/index";
 
-export default function AddCard(props) {
+function AddCard(props) {
   const [question, onChangeTextQuestion] = React.useState("");
   const [answer, onChangeTextAnswer] = React.useState("");
 
   const questionRef = useRef(null);
   const answerRef = useRef(null);
+
+  const validInput = (answer === "" || question === "")
+
+  const saveCardToDeck = () => {
+    props
+      .dispatch(
+        saveCard(props.route.params.DeckId, {
+          qustion: question,
+          answer: answer,
+        })
+      )
+      .then(() => props.navigation.goBack());
+  };
 
   return (
     <KeyboardAvoidingView
@@ -44,10 +59,9 @@ export default function AddCard(props) {
             ref={answerRef}
           />
           <TouchableOpacity
-            style={styles.button}
-            onPress={() =>
-              console.log("question:", question, " answer:", answer)
-            }
+            disabled={validInput}
+            style={validInput? styles.buttonDisabled : styles.button}
+            onPress={saveCardToDeck}
           >
             <Text style={{ color: "white", fontSize: 16 }}>Submit</Text>
           </TouchableOpacity>
@@ -56,6 +70,12 @@ export default function AddCard(props) {
     </KeyboardAvoidingView>
   );
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+export default connect(null, mapDispatchToProps)(AddCard);
 
 const styles = StyleSheet.create({
   text: {
@@ -92,5 +112,16 @@ const styles = StyleSheet.create({
     width: "80%",
     alignSelf: "center",
     backgroundColor: "#AA36F4",
+  },
+  buttonDisabled: {
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 15,
+    borderColor: "#AA36F4",
+    borderRadius: 20,
+    height: 40,
+    width: "80%",
+    alignSelf: "center",
+    backgroundColor: "#828282",
   },
 });

@@ -25,7 +25,7 @@ export default function decks(state = {}, action) {
       return {
         ...state,
         ...state.decks,
-        [action.deck]: {
+        [action.deckId]: {
           ...state.decks[action.deckId],
           questions: {
             ...state.decks[action.deckId].questions.push({
