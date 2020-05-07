@@ -29,8 +29,8 @@ export default function decks(state = {}, action) {
           ...state.decks[action.deckId],
           questions: {
             ...state.decks[action.deckId].questions.push({
-              question: action.card.question,
-              answer: action.card.answer,
+              "question": action.card.question,
+              "answer": action.card.answer,
             }),
           },
         },

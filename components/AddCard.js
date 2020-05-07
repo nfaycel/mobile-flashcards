@@ -26,7 +26,7 @@ function AddCard(props) {
     props
       .dispatch(
         saveCard(props.route.params.DeckId, {
-          qustion: question,
+          question: question,
           answer: answer,
         })
       )

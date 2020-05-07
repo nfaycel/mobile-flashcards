@@ -5,7 +5,9 @@ import { handleDeleteDeck } from "../actions/index";
 import { connect } from "react-redux";
 
 function Deck(props) {
-  const DeckId = props.route.params.DeckId;
+  //const DeckId = props.route.params.DeckId;
+
+  const deck = props.deck(props.route.params.DeckId);
 
   useEffect(() => {
     const parent = props.navigation.dangerouslyGetParent();
@@ -31,7 +33,7 @@ function Deck(props) {
           text: "Yes",
           onPress: () => {
             props
-              .dispatch(handleDeleteDeck(props.route.params.DeckId))
+              .dispatch(handleDeleteDeck(deck.title))
               .then(() => props.navigation.goBack());
           },
         },
@@ -40,19 +42,19 @@ function Deck(props) {
     );
   };
 
-  return (
+  return deck ? (
     <View style={styles.container}>
       <View>
-        <Text style={styles.text}>{DeckId}</Text>
+        <Text style={styles.text}>{deck.title}</Text>
         <Text style={[styles.text, { fontSize: 18, color: "gray" }]}>
-          2 cards
+          {deck.questions ? deck.questions.length : 0} cards
         </Text>
       </View>
       <View style={styles.btnGroup}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            props.navigation.navigate("AddCard", { DeckId: DeckId });
+            props.navigation.navigate("AddCard", { DeckId: deck.title });
           }}
         >
           <Text style={[styles.text, { color: "black" }]}>Add Card</Text>
@@ -60,7 +62,9 @@ function Deck(props) {
 
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "#AA36F4" }]}
-          onPress={() => props.navigation.navigate("Quiz", { DeckId: DeckId })}
+          onPress={() =>
+            props.navigation.navigate("Quiz", { DeckId: deck.title,mDeck:deck })
+          }
         >
           <Text style={[styles.text, { color: "white" }]}>Start Quiz</Text>
         </TouchableOpacity>
@@ -75,11 +79,13 @@ function Deck(props) {
               { color: "#FF1744", fontSize: 17, marginTop: 10 },
             ]}
           >
-            Delete Deck {DeckId}
+            Delete Deck {deck.title}
           </Text>
         </TouchableOpacity>
       </View>
     </View>
+  ) : (
+    <Text>Going back...</Text>
   );
 }
 
@@ -114,4 +120,10 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 
-export default connect(null, mapDispatchToProps)(Deck);
+const mapStateToProps = ({ decks }) => {
+  return {
+    deck: (id) => decks[id],
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Deck);
