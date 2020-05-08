@@ -59,15 +59,20 @@ function Deck(props) {
         >
           <Text style={[styles.text, { color: "black" }]}>Add Card</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "#AA36F4" }]}
-          onPress={() =>
-            props.navigation.navigate("Quiz", { DeckId: deck.title,mDeck:deck })
-          }
-        >
-          <Text style={[styles.text, { color: "white" }]}>Start Quiz</Text>
-        </TouchableOpacity>
+        {deck.questions.length !== 0 && (
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#AA36F4" }]}
+            disabled={deck.questions.length === 0}
+            onPress={() => {
+              props.navigation.navigate("Quiz", {
+                DeckId: deck.title,
+                mDeck: deck,
+              });
+            }}
+          >
+            <Text style={[styles.text, { color: "white" }]}>Start Quiz</Text>
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity
           style={[{ backgroundColor: null }]}
@@ -122,7 +127,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = ({ decks }) => {
   return {
-    deck: (id) => decks[id],
+    deck: (id) => decks && decks[id],
   };
 };
 
