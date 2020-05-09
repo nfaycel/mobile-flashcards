@@ -7,13 +7,12 @@ import {
   Text,
 } from "react-native";
 import { connect } from "react-redux";
-import { handleGetAllDecks  } from "../actions";
+import { handleGetAllDecks } from "../actions";
 
 class List extends React.Component {
   componentDidMount() {
     this.props.initilizeData();
   }
-
   render() {
     return (
       <View style={styles.container}>
@@ -29,7 +28,7 @@ class List extends React.Component {
               <View>
                 <Text style={styles.text}>{item.title}</Text>
                 <Text style={{ textAlign: "center" }}>
-                  {item.questions?item.questions.length:0} cards
+                  {item.questions ? item.questions.length : 0} cards
                 </Text>
               </View>
             </TouchableOpacity>
@@ -41,12 +40,12 @@ class List extends React.Component {
   }
 }
 
-
 const mapStateToProps = ({ decks }) => {
   const decksList = [];
-  decks && Object.entries(decks).forEach(([key, value]) => {
-    decksList.push(value);
-  });
+  decks &&
+    Object.entries(decks).forEach(([key, value]) => {
+      decksList.push(value);
+    });
   return {
     decksList,
   };
@@ -70,7 +69,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // marginTop: Constants.statusBarHeight,
     alignItems: "stretch",
   },
   deck: {

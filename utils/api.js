@@ -3,9 +3,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 const FLASHCARDS_STORAGE_KEY = "flashcards_data";
 
 function initialData() {
-  // clearAsyncStorage = async () => {
-  //   AsyncStorage.clear();
-  // };
   return {
     React: {
       title: "React",
@@ -35,15 +32,13 @@ function initialData() {
 
 export async function getDecks() {
   try {
-    const clear = await AsyncStorage.clear();
-    console.log(clear)
+    //to reset data incomment the next line
+    // const clear = await AsyncStorage.clear();
     const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
     if (results) {
       const data = JSON.parse(results);
-      console.log("result:",(results))
       return data;
     } else {
-      console.log("else:", initialDate());
       await AsyncStorage.setItem(
         FLASHCARDS_STORAGE_KEY,
         JSON.stringify(initialData())
@@ -55,7 +50,6 @@ export async function getDecks() {
       FLASHCARDS_STORAGE_KEY,
       JSON.stringify(initialData())
     );
-
     return initialData();
   }
 }
@@ -63,7 +57,7 @@ export async function getDecks() {
 export async function saveDeckTitle(title) {
   const deck = {
     [title]: {
-      "title": title,
+      title: title,
       questions: [],
     },
   };
@@ -75,7 +69,6 @@ export async function saveDeckTitle(title) {
     })
   );
   const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
-  console.log("result after addin:",results)
   return deck;
 }
 
@@ -99,9 +92,7 @@ export async function removeDeck(deckId) {
   const results = await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY);
   if (results) {
     const data = JSON.parse(results);
-    console.log("data to delete:",data)
     delete data[deckId];
-
     await AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(data));
     return data;
   }

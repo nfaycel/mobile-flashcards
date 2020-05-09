@@ -9,9 +9,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "react-native-vector-icons";
 import { StackDecksComponent } from "./components/navigation/StackDecks";
 import { StackNewDeckComponent } from "./components/navigation/StackNewDeck";
+import { setLocalNotification } from "./utils/helpers";
 
 const Tab = createBottomTabNavigator();
 function App() {
+  React.useEffect(() => {
+    setLocalNotification();
+  }, []);
+
   return (
     <Provider store={createStore(reducer, middleware)}>
       <NavigationContainer style={styles.container}>

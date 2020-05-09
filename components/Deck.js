@@ -5,10 +5,7 @@ import { handleDeleteDeck } from "../actions/index";
 import { connect } from "react-redux";
 
 function Deck(props) {
-  //const DeckId = props.route.params.DeckId;
-
   const deck = props.deck(props.route.params.DeckId);
-
   useEffect(() => {
     const parent = props.navigation.dangerouslyGetParent();
     parent.setOptions({
@@ -102,13 +99,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // marginTop: Constants.statusBarHeight,
     alignItems: "stretch",
     justifyContent: "space-evenly",
   },
   button: {
     alignItems: "center",
-    // backgroundColor: "#DDDDDD",
     padding: 10,
     margin: 15,
     borderColor: "#AA36F4",

@@ -16,12 +16,9 @@ import { saveCard } from "../actions/index";
 function AddCard(props) {
   const [question, onChangeTextQuestion] = React.useState("");
   const [answer, onChangeTextAnswer] = React.useState("");
-
   const questionRef = useRef(null);
   const answerRef = useRef(null);
-
-  const validInput = (answer === "" || question === "")
-
+  const validInput = answer === "" || question === "";
   const saveCardToDeck = () => {
     props
       .dispatch(
@@ -60,7 +57,7 @@ function AddCard(props) {
           />
           <TouchableOpacity
             disabled={validInput}
-            style={validInput? styles.buttonDisabled : styles.button}
+            style={validInput ? styles.buttonDisabled : styles.button}
             onPress={saveCardToDeck}
           >
             <Text style={{ color: "white", fontSize: 16 }}>Submit</Text>
@@ -86,7 +83,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // marginTop: Constants.statusBarHeight,
     alignItems: "stretch",
     justifyContent: "flex-start",
     marginTop: 20,

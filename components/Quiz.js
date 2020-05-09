@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { clearLocalNotification, setLocalNotification } from "../utils/helpers";
 
 function Quiz(props) {
-  const deck = props.route.params.mDeck;
+  useEffect(() => {
+    clearLocalNotification()
+      .then(setLocalNotification)
+      .catch((e) => console.log("error", e));
+  }, []);
 
+  const deck = props.route.params.mDeck;
   const [currentCard, nextCard] = useState(0);
   const [correctAnswer, addCorrectAnswer] = useState(0);
   const [cardFront, flipCard] = useState(true);
-
   const endQuiz = currentCard < deck.questions.length ? false : true;
 
   return (
@@ -82,9 +87,7 @@ function Quiz(props) {
                   }}
                   style={[styles.button, { backgroundColor: "#64DD17" }]}
                 >
-                  <Text style={[styles.text, styles.btnText]}>
-                    correct
-                  </Text>
+                  <Text style={[styles.text, styles.btnText]}>correct</Text>
                 </TouchableOpacity>
               </View>
               <View style={{ width: "50%" }}>
@@ -95,9 +98,7 @@ function Quiz(props) {
                   }}
                   style={[styles.button, { backgroundColor: "#F76055" }]}
                 >
-                  <Text style={[styles.text,styles.btnText]}>
-                    incorrect
-                  </Text>
+                  <Text style={[styles.text, styles.btnText]}>incorrect</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -116,9 +117,7 @@ function Quiz(props) {
             style={[styles.button, { margin: 15 }]}
             onPress={() => props.navigation.goBack()}
           >
-            <Text style={[styles.text,styles.btnText]}>
-              Go back
-            </Text>
+            <Text style={[styles.text, styles.btnText]}>Go back</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button]}
@@ -127,9 +126,7 @@ function Quiz(props) {
               addCorrectAnswer(0);
             }}
           >
-            <Text style={[styles.text,styles.btnText]}>
-              Restart the quiz
-            </Text>
+            <Text style={[styles.text, styles.btnText]}>Restart the quiz</Text>
           </TouchableOpacity>
         </View>
       )}

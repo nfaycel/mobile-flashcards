@@ -21,7 +21,7 @@ class AddDeck extends Component {
   onChangeText = (textValue) => this.setState({ value: textValue });
 
   onCreateDeck = () => {
-    this.props.decks!== undefined && this.props.decks[this.state.value]
+    this.props.decks !== undefined && this.props.decks[this.state.value]
       ? Alert.alert(
           "Deck title already exists",
           "Please choose another title !",
@@ -34,9 +34,7 @@ class AddDeck extends Component {
           });
 
           this.setState({ value: "" });
-          // this.onChangeText("");
         });
-    // this.props.navigation.navigate("Deck", { DeckId: this.state.value, newDeck:true });
   };
 
   render() {
